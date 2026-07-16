@@ -12,11 +12,13 @@ import static org.hamcrest.Matchers.is;
 public class MovieControllerRA {
 
     private String existingMovieTitle;
+    private Long existingMovieId;
 
     @BeforeEach
     void setUp() {
         baseURI = "http://localhost:8080";
         existingMovieTitle = "Matrix";
+        existingMovieId = 7L;
     }
 
 
@@ -45,6 +47,16 @@ public class MovieControllerRA {
 
     @Test
     public void findByIdShouldReturnMovieWhenIdExists() {
+        given()
+            .when()
+                .get("/movies/{existingMovieId}", existingMovieId)
+            .then()
+                .statusCode(200)
+                .body("id", is(7))
+                .body("title", equalTo("Titanic"))
+                .body("image", equalTo("https://www.themoviedb.org/t/p/w533_and_h300_bestv2/yDI6D5ZQh67YU4r2ms8qcSbAviZ.jpg"))
+                .body("count", is(0))
+                .body("score", is(0.0F));
     }
 
     @Test
