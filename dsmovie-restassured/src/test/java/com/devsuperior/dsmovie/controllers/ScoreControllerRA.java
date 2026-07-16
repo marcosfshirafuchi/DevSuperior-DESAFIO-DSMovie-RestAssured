@@ -15,7 +15,7 @@ import static io.restassured.RestAssured.given;
 
 public class ScoreControllerRA {
 
-	private Long nonExistingMovieId;
+	private Long nonExistingMovieId, missingMovieId;
 	private String adminUsername, adminPassword, clientUsername, clientPassword;
 	private String adminToken, clientToken;
 
@@ -26,6 +26,7 @@ public class ScoreControllerRA {
 		baseURI = "http://localhost:8080";
 
 		nonExistingMovieId = 100L;
+		missingMovieId = null;
 
 		adminUsername = "maria@gmail.com";
 		adminPassword = "123456";
@@ -58,6 +59,18 @@ public class ScoreControllerRA {
 	
 	@Test
 	public void saveScoreShouldReturnUnprocessableEntityWhenMissingMovieId() throws Exception {
+		putScoreInstance.put("movieId", missingMovieId);
+		JSONObject newScore = new JSONObject(putScoreInstance);
+		given()
+			.header("Content-type","application/json")
+			.header("Authorization","Bearer " + adminToken)
+			.body(newScore.toString())
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+		.when()
+			.put("/scores")
+		.then()
+			.statusCode(422);
 	}
 
 	@Test
