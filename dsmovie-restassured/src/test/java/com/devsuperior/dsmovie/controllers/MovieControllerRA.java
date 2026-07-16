@@ -19,8 +19,8 @@ public class MovieControllerRA {
 
     private String existingMovieTitle, blankMovieTitle;
     private Long existingMovieId, nonExistingMovieId;
-    private String adminUsername, adminPassword;
-    private String adminToken;
+    private String adminUsername, adminPassword, clientUsername, clientPassword;
+    private String adminToken, clientToken;
 
     private Map<String, Object> postMovieInstance;
 
@@ -34,8 +34,11 @@ public class MovieControllerRA {
 
         adminUsername = "maria@gmail.com";
         adminPassword = "123456";
+        clientUsername = "alex@gmail.com";
+        clientPassword = "123456";
 
         adminToken = TokenUtil.obtainAccessToken(adminUsername, adminPassword);
+        clientToken = TokenUtil.obtainAccessToken(clientUsername, clientPassword);
 
         postMovieInstance = new HashMap<>();
         postMovieInstance.put("title","Test Movie");
@@ -109,6 +112,17 @@ public class MovieControllerRA {
 
     @Test
     public void insertShouldReturnForbiddenWhenClientLogged() throws Exception {
+        JSONObject newMovie = new JSONObject(postMovieInstance);
+        given()
+            .header("Content-type","application/json")
+            .header("Authorization","Bearer " + clientToken)
+            .body(newMovie.toString())
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post("/movies")
+        .then()
+            .statusCode(403);
     }
 
     @Test
