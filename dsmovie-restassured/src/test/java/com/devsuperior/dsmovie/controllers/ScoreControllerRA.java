@@ -18,6 +18,7 @@ public class ScoreControllerRA {
 	private Long nonExistingMovieId, missingMovieId;
 	private String adminUsername, adminPassword, clientUsername, clientPassword;
 	private String adminToken, clientToken;
+	private Double scoreIsLessThanZero;
 
 	private Map<String, Object> putScoreInstance;
 
@@ -27,6 +28,7 @@ public class ScoreControllerRA {
 
 		nonExistingMovieId = 100L;
 		missingMovieId = null;
+		scoreIsLessThanZero = -5.0;
 
 		adminUsername = "maria@gmail.com";
 		adminPassword = "123456";
@@ -75,5 +77,17 @@ public class ScoreControllerRA {
 
 	@Test
 	public void saveScoreShouldReturnUnprocessableEntityWhenScoreIsLessThanZero() throws Exception {
+		putScoreInstance.put("score", scoreIsLessThanZero);
+		JSONObject newScore = new JSONObject(putScoreInstance);
+		given()
+			.header("Content-type","application/json")
+			.header("Authorization","Bearer " + adminToken)
+			.body(newScore.toString())
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+		.when()
+			.put("/scores")
+		.then()
+			.statusCode(422);
 	}
 }
