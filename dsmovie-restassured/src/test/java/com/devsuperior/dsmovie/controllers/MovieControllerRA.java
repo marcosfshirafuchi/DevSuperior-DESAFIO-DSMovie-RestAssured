@@ -69,15 +69,15 @@ public class MovieControllerRA {
                 .statusCode(404);
     }
 
-//    @Test
-//    public void insertShouldReturnUnprocessableEntityWhenAdminLoggedAndBlankTitle() throws JSONException {
-//    }
-//
-//    @Test
-//    public void insertShouldReturnForbiddenWhenClientLogged() throws Exception {
-//    }
-//
-//    @Test
-//    public void insertShouldReturnUnauthorizedWhenInvalidToken() throws Exception {
-//    }
+    @Test
+    public void insertShouldReturnUnprocessableEntityWhenAdminLoggedAndBlankTitle() throws JSONException {
+    }
+
+    @Test
+    public void insertShouldReturnForbiddenWhenClientLogged() throws Exception {
+    }
+
+    @Test
+    public void insertShouldReturnUnauthorizedWhenInvalidToken() throws Exception {
+    }
 }
