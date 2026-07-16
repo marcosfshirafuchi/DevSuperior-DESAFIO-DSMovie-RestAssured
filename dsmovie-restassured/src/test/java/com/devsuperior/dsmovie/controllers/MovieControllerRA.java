@@ -12,13 +12,14 @@ import static org.hamcrest.Matchers.is;
 public class MovieControllerRA {
 
     private String existingMovieTitle;
-    private Long existingMovieId;
+    private Long existingMovieId, nonExistingMovieId;
 
     @BeforeEach
     void setUp() {
         baseURI = "http://localhost:8080";
         existingMovieTitle = "Matrix";
         existingMovieId = 7L;
+        nonExistingMovieId = 100L;
     }
 
 
@@ -49,7 +50,7 @@ public class MovieControllerRA {
     public void findByIdShouldReturnMovieWhenIdExists() {
         given()
             .when()
-                .get("/movies/{existingMovieId}", existingMovieId)
+                .get("/movies/{id}", existingMovieId)
             .then()
                 .statusCode(200)
                 .body("id", is(7))
@@ -61,17 +62,22 @@ public class MovieControllerRA {
 
     @Test
     public void findByIdShouldReturnNotFoundWhenIdDoesNotExist() {
+        given()
+            .when()
+                .get("/movies/{id}", nonExistingMovieId)
+            .then()
+                .statusCode(404);
     }
 
-    @Test
-    public void insertShouldReturnUnprocessableEntityWhenAdminLoggedAndBlankTitle() throws JSONException {
-    }
-
-    @Test
-    public void insertShouldReturnForbiddenWhenClientLogged() throws Exception {
-    }
-
-    @Test
-    public void insertShouldReturnUnauthorizedWhenInvalidToken() throws Exception {
-    }
+//    @Test
+//    public void insertShouldReturnUnprocessableEntityWhenAdminLoggedAndBlankTitle() throws JSONException {
+//    }
+//
+//    @Test
+//    public void insertShouldReturnForbiddenWhenClientLogged() throws Exception {
+//    }
+//
+//    @Test
+//    public void insertShouldReturnUnauthorizedWhenInvalidToken() throws Exception {
+//    }
 }
