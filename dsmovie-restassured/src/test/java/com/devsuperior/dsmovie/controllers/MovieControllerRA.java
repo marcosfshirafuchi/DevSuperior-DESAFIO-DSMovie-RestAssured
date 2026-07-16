@@ -1,15 +1,22 @@
 package com.devsuperior.dsmovie.controllers;
 
 import org.json.JSONException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 public class MovieControllerRA {
 
+    private String existingMovieTitle;
+
+    @BeforeEach
     void setUp() {
         baseURI = "http://localhost:8080";
+        existingMovieTitle = "Matrix";
     }
 
 
@@ -24,6 +31,16 @@ public class MovieControllerRA {
 
     @Test
     public void findAllShouldReturnPagedMoviesWhenMovieTitleParamIsNotEmpty() {
+        given()
+            .when()
+                .get("/movies?title={existingMovieTitle}", existingMovieTitle)
+            .then()
+                .statusCode(200)
+                .body("content.id[0]", is(4))
+                .body("content.title[0]", equalTo("Matrix Resurrections"))
+                .body("content.image[0]", equalTo("https://www.themoviedb.org/t/p/w533_and_h300_bestv2/hv7o3VgfsairBoQFAawgaQ4cR1m.jpg"))
+                .body("content.count[0]", is(0))
+                .body("content.score[0]", is(0.0F));
     }
 
     @Test
